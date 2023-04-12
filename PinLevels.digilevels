@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PinLevelsFile xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" schemaVersion="1.0" xmlns="http://www.ni.com/Semiconductor/PinLevels">
+  <PinLevelsSheet>
+    <DigitalPinLevelSets>
+      <DigitalPinLevelSet pin="CLK_P">
+        <Vil>0</Vil>
+        <Vih>1.2</Vih>
+        <TerminationMode>HighZ</TerminationMode>
+      </DigitalPinLevelSet>
+      <DigitalPinLevelSet pin="CLK_N">
+        <Vil>0</Vil>
+        <Vih>1.2</Vih>
+        <TerminationMode>HighZ</TerminationMode>
+      </DigitalPinLevelSet>
+    </DigitalPinLevelSets>
+    <PowerPinLevelSets>
+      <PowerPinLevelSet pin="io1">
+        <Vf>0</Vf>
+        <Ic>0.001</Ic>
+        <Sense>Local</Sense>
+      </PowerPinLevelSet>
+      <PowerPinLevelSet pin="io2">
+        <Vf>0</Vf>
+        <Ic>0.001</Ic>
+        <Sense>Local</Sense>
+      </PowerPinLevelSet>
+      <PowerPinLevelSet pin="Vss">
+        <Vf>0</Vf>
+        <Ic>0.005</Ic>
+        <Sense>Local</Sense>
+      </PowerPinLevelSet>
+    </PowerPinLevelSets>
+  </PinLevelsSheet>
+</PinLevelsFile>

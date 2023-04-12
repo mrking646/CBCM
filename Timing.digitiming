@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TimingFile xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" schemaVersion="1.0" xmlns="http://www.ni.com/Semiconductor/Timing">
+  <TimingSheet>
+    <TimeSets>
+      <TimeSet name="clock">
+        <Period>1.04 µs</Period>
+        <PinEdges>
+          <PinEdge pin="CLK_P">
+            <ReturnToLow>
+              <On>20 ns</On>
+              <Data>200 ns</Data>
+              <Return>700 ns</Return>
+              <Off>1.04 µs</Off>
+            </ReturnToLow>
+            <CompareStrobe>
+              <Strobe>0</Strobe>
+            </CompareStrobe>
+            <DataSource>Pattern</DataSource>
+          </PinEdge>
+          <PinEdge pin="CLK_N">
+            <ReturnToLow>
+              <On>20 ns</On>
+              <Data>350 ns</Data>
+              <Return>550 ns</Return>
+              <Off>1.04 µs</Off>
+            </ReturnToLow>
+            <CompareStrobe>
+              <Strobe>0</Strobe>
+            </CompareStrobe>
+            <DataSource>Pattern</DataSource>
+          </PinEdge>
+        </PinEdges>
+      </TimeSet>
+      <TimeSet name="init">
+        <Period>1.04 µs</Period>
+        <PinEdges>
+          <PinEdge pin="CLK_N">
+            <DriveNonReturn>
+              <On>0 ns</On>
+              <Data>0 ns</Data>
+              <Off>1.04 µs</Off>
+            </DriveNonReturn>
+            <CompareStrobe>
+              <Strobe>0</Strobe>
+            </CompareStrobe>
+            <DataSource>Pattern</DataSource>
+          </PinEdge>
+          <PinEdge pin="CLK_P">
+            <DriveNonReturn>
+              <On>0 ns</On>
+              <Data>0 ns</Data>
+              <Off>1.04 µs</Off>
+            </DriveNonReturn>
+            <CompareStrobe>
+              <Strobe>0</Strobe>
+            </CompareStrobe>
+            <DataSource>Pattern</DataSource>
+          </PinEdge>
+        </PinEdges>
+      </TimeSet>
+    </TimeSets>
+  </TimingSheet>
+</TimingFile>
