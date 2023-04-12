@@ -2,7 +2,8 @@ import argparse
 import nidigital
 import os
 import sys
-
+import nidcpower
+from dcpowerSweep import runIVSweeps, IVSweep, ChnVoltSweep, ChnVoltBias
 
 def example(resource_name, options, trigger_source=None, trigger_edge=None):
 
@@ -21,11 +22,30 @@ def example(resource_name, options, trigger_source=None, trigger_edge=None):
         timing_filename = os.path.join(dir, 'Timing.digitiming')
         session.load_specifications_levels_and_timing(spec_filename, levels_filename, timing_filename)
         session.conditional_jump_trigger_type = nidigital.TriggerType.DIGITAL_EDGE
-        session.digital_edge_conditional_jump_trigger_source = 'PXI_Trig0'
+        session.digital_edge_conditional_jump_trigger_source = 'PXI_Trig2'
         session.digital_edge_conditional_jump_trigger_edge = nidigital.DigitalEdge.RISING
-        
-        session.pattern_opcode_events[0].exported_pattern_opcode_event_output_terminal = 'PXI_Trig0'
+        sourceTrigger = 'PXI_Trig0'
+        measureTrigger = 'PXI_Trig1'
+        sourceCompleteEvent = 'PXI_Trig2'
+        measureCompleteEvent = 'PXI_Trig3'
+        session.conditional_jump_triggers[2].digital_edge_conditional_jump_trigger_source = sourceCompleteEvent
+        session.conditional_jump_triggers[0].digital_edge_conditional_jump_trigger_source = measureCompleteEvent
+    
 
+        cbcm = IVSweep(ChnVoltSweep('G', 'SMU1/1', V_start=-0.5, V_stop=1.5, V_step=0.02, I_compl=1e-3, remote_sense=False),
+                  [ChnVoltBias('D', 'SMU1/6', 0.1, I_compl=1e-3, remote_sense=False),
+                  ChnVoltBias('S', 'SMU1/5', 0, I_compl=1e-3),
+                  ChnVoltBias('B', 'SMU1/4', 0, I_compl=1e-3),
+                   ],
+                  apertureTime=20e-3,
+                  sourceDelay=5e-5,
+                  isMaster=1,
+                  )
+
+
+
+        session.pattern_opcode_events[0].exported_pattern_opcode_event_output_terminal = measureTrigger # send measureTrigger to PXI_Trig0
+        session.pattern_opcode_events[2].exported_pattern_opcode_event_output_terminal = sourceTrigger # send sourceTrigger to PXI_Trig1
         # Apply the settings from the levels and timing sheets we just loaded to the session
         session.apply_levels_and_timing(levels_filename, timing_filename)
 
@@ -51,6 +71,10 @@ def example(resource_name, options, trigger_source=None, trigger_edge=None):
         # Disconnect all channels using programmable onboard switching
         session.selected_function = nidigital.SelectedFunction.DISCONNECT
     print('Done bursting pattern')
+
+def dcBias():
+    pass
+
 
 
 def _main(argsv):
