@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PinMap xmlns="http://www.ni.com/TestStand/SemiconductorModule/PinMap.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" schemaVersion="1.6">
 	<Instruments>
-		<NIDigitalPatternInstrument name="DigitalPattern" numberOfChannels="32" group="Digital" />
-		<NIDCPowerInstrument name="PXIe4163" numberOfChannels="24">
+		<NIDigitalPatternInstrument name="PXIe6570" numberOfChannels="32" group="Digital" />
+		<NIDCPowerInstrument name="SMU1j" numberOfChannels="24">
 			<ChannelGroup name="CommonDCPowerChannelGroup" />
 		</NIDCPowerInstrument>
 	</Instruments>
@@ -18,10 +18,10 @@
 		<Site siteNumber="0" />
 	</Sites>
 	<Connections>
-		<Connection pin="io1" siteNumber="0" instrument="PXIe4163" channel="0" />
-		<Connection pin="CLK_P" siteNumber="0" instrument="DigitalPattern" channel="0" />
-		<Connection pin="CLK_N" siteNumber="0" instrument="DigitalPattern" channel="1" />
-		<SystemConnection pin="Vss" instrument="PXIe4163" channel="3" />
-		<SystemConnection pin="io2" instrument="PXIe4163" channel="1" />
+		<Connection pin="io1" siteNumber="0" instrument="SMU1j" channel="0" />
+		<Connection pin="CLK_P" siteNumber="0" instrument="PXIe6570" channel="29" />
+		<Connection pin="CLK_N" siteNumber="0" instrument="PXIe6570" channel="31" />
+		<SystemConnection pin="Vss" instrument="SMU1j" channel="3" />
+		<SystemConnection pin="io2" instrument="SMU1j" channel="1" />
 	</Connections>
 </PinMap>

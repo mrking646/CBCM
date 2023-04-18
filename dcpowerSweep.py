@@ -15,7 +15,7 @@ import multiprocessing
 from itertools import repeat
 import pandas as pd
 import contextlib
-from driver.HP4156C import HP4156C
+# from driver.HP4156C import HP4156C
 
 
 def ivi_synchronized(f):
@@ -714,5 +714,5 @@ def _test():
 
 
 
-_test()
+# _test()
 # measurement1pt()

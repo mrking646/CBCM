@@ -26,7 +26,7 @@
       </PowerPinLevelSet>
       <PowerPinLevelSet pin="Vss">
         <Vf>0</Vf>
-        <Ic>0.005</Ic>
+        <Ic>0.001</Ic>
         <Sense>Local</Sense>
       </PowerPinLevelSet>
     </PowerPinLevelSets>
