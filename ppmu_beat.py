@@ -10,7 +10,7 @@ def example(resource_name, options, trigger_source=None, trigger_edge=None):
     with nidigital.Session(resource_name=resource_name, options=options) as session:
 
         dir = os.path.join(os.path.dirname(__file__)) # Path to the .pinmap, .specs, .digilevels, .digitiming, and .digipat files
-        
+        print(dir)
 
         # Load the pin map (.pinmap) created using the Digital Pattern Editor
         pin_map_filename = os.path.join(dir, 'PinMap.pinmap')
@@ -22,16 +22,7 @@ def example(resource_name, options, trigger_source=None, trigger_edge=None):
         timing_filename = os.path.join(dir, 'Timing.digitiming')
         session.load_specifications_levels_and_timing(spec_filename, levels_filename, timing_filename)
         
-        # session.conditional_jump_trigger_type = nidigital.TriggerType.DIGITAL_EDGE
-        # session.digital_edge_conditional_jump_trigger_source = 'PXI_Trig2'
-        # session.digital_edge_conditional_jump_trigger_edge = nidigital.DigitalEdge.RISING
-        # sourceTrigger = 'PXI_Trig0'
-        # measureTrigger = 'PXI_Trig1'
-        # sourceCompleteEvent = 'PXI_Trig2'
-        # measureCompleteEvent = 'PXI_Trig3'
-        # session.conditional_jump_triggers[2].digital_edge_conditional_jump_trigger_source = sourceCompleteEvent
-        # session.conditional_jump_triggers[0].digital_edge_conditional_jump_trigger_source = measureCompleteEvent
-    
+        
         VDD = 1.5
         cbcm = IVSweep(ChnVoltSweep('io1', 'SMU1/1', V_start=0, V_stop=1.2, V_step=0.02, I_compl=1e-3, remote_sense=False),
                   [ChnVoltBias('io2', 'SMU1/6', 0.0, I_compl=1e-3, remote_sense=False),
@@ -52,7 +43,7 @@ def example(resource_name, options, trigger_source=None, trigger_edge=None):
         session.apply_levels_and_timing(levels_filename, timing_filename)
 
         # Loading the pattern file (.digipat) created using the Digital Pattern Editor
-        pattern_filename = os.path.join(dir, 'Pattern.digipat')
+        pattern_filename = os.path.join(dir, 'Pattern_2.digipat')
         session.load_pattern(pattern_filename)
         # session.write_sequencer_register(reg=nidigital.SequencerRegister.REGISTER0, value=2000)
         # print(session.read_sequencer_register(reg=nidigital.SequencerRegister.REGISTER0))
@@ -68,7 +59,7 @@ def example(resource_name, options, trigger_source=None, trigger_edge=None):
 
         # If start trigger is configured, waiting for the trigger to start bursting and then blocks until the pattern is done bursting
         # Else just start bursting and block until the pattern is done bursting
-        session.burst_pattern(start_label='new_pattern')
+        session.burst_pattern(start_label='initialize1')
 
         # Disconnect all channels using programmable onboard switching
         session.selected_function = nidigital.SelectedFunction.DISCONNECT
@@ -106,7 +97,7 @@ def test_main():
 
 def test_example():
     resource_name = 'PXIe6570'
-    options = {'simulate': False, 'driver_setup': {'Model': '6570'}, }
+    options = {'simulate': True, 'driver_setup': {'Model': '6570'}, }
     example(resource_name, options)
 
     trigger_source = '/PXI1Slot2/PXI_Trig0'

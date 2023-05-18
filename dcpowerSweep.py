@@ -352,7 +352,7 @@ def runIVSweeps(*lstIVSweep : IVSweep, CSV_name, measureTrigger, sourceTrigger):
     sorted_resources = sorted(resources)
     sorted_resources.sort(key=takeSecond)
     resources = [resources[key] for key in sorted_resources] # sorted channel names
-    print("resources", resources)
+    # print("resources", resources)
     session = nidcpower.Session(resource_name=resources)
 
     session.power_line_frequency = 50
@@ -367,7 +367,9 @@ def runIVSweeps(*lstIVSweep : IVSweep, CSV_name, measureTrigger, sourceTrigger):
     session.voltage_level = 0.0
     session.output_connected = True
     session.output_enabled = True
-    session.autorange = False
+    session.autorange = True
+    # session.autorange_aperture_time_mode = nidcpower.AutorangeApertureTimeMode.AUTO
+    session.aperture_time = 20e-3
     # session.autorange_maximum_delay_after_range_change = 9
     # session.autorange_aperture_time_mode = nidcpower.AutorangeApertureTimeMode.AUTO
     # session.autorange_minimum_current_range = 10e-9
@@ -375,7 +377,7 @@ def runIVSweeps(*lstIVSweep : IVSweep, CSV_name, measureTrigger, sourceTrigger):
     # session.autorange_threshold_mode = nidcpower.AutorangeThresholdMode.HIGH_HYSTERESIS
     # session.autorange_threshold_mode=nidcpower.AutorangeThresholdMode.NORMAL
     session.current_limit_autorange = True
-    session.transient_response = nidcpower.TransientResponse.NORMAL
+    # session.transient_response = nidcpower.TransientResponse.NORMAL
     # session.aperture_time_auto_mode = nidcpower.ApertureTimeAutoMode.
     # session.autorange_maximum_delay_after_range_change = 0.1
     # session.measure_complete_event_delay
@@ -396,7 +398,7 @@ def runIVSweeps(*lstIVSweep : IVSweep, CSV_name, measureTrigger, sourceTrigger):
         # chnSweep.source_trigger_type = nidcpower.TriggerType.SOFTWARE_EDGE
         # chnSweep.send_software_edge_trigger
         
-        chnSweep.current_level_range = 1e-6
+        # chnSweep.current_level_range = 1e-6
         # chnSweep.measure_complete_event_delay = 1
         # chnSweep.source_trigger_type =
         V_start, V_stop, V_step = ivSweep.sweep.V_start, ivSweep.sweep.V_stop, ivSweep.sweep.V_step
@@ -406,22 +408,22 @@ def runIVSweeps(*lstIVSweep : IVSweep, CSV_name, measureTrigger, sourceTrigger):
         # vSteps = np.zeros(numStep+1)
         vSteps = np.linspace(V_start, V_stop, numStep, endpoint=True)
         vSteps = np.append(vSteps, 0)
-        print(vSteps)
+        # print(vSteps)
         # vSteps = np.insert(vSteps, 0, 0)
-        chnSweep.source_trigger_type = nidcpower.TriggerType.DIGITAL_EDGE
-        chnSweep.digital_edge_source_trigger_input_terminal = sourceTriggerInputTerminal
-        chnSweep.digital_edge_measure_trigger_input_terminal = measureTriggerInputTerminal
-        chnSweep.source_complete_event_pulse_width = 300e-9  
-        chnSweep.measure_complete_event_pulse_width = 300e-9
-        chnSweep.source_complete_event_pulse_polarity = nidcpower.Polarity.HIGH
-        chnSweep.measure_complete_event_pulse_polarity = nidcpower.Polarity.HIGH
-        chnSweep.source_complete_event_output_terminal = "PXI_Trig2"
-        chnSweep.measure_complete_event_output_terminal = "PXI_Trig1"
+        # chnSweep.source_trigger_type = nidcpower.TriggerType.DIGITAL_EDGE
+        # chnSweep.digital_edge_source_trigger_input_terminal = sourceTriggerInputTerminal
+        # chnSweep.digital_edge_measure_trigger_input_terminal = measureTriggerInputTerminal
+        # chnSweep.source_complete_event_pulse_width = 300e-9  
+        # chnSweep.measure_complete_event_pulse_width = 300e-9
+        # chnSweep.source_complete_event_pulse_polarity = nidcpower.Polarity.HIGH
+        # chnSweep.measure_complete_event_pulse_polarity = nidcpower.Polarity.HIGH
+        # chnSweep.source_complete_event_output_terminal = "PXI_Trig2"
+        # chnSweep.measure_complete_event_output_terminal = "PXI_Trig1"
 
-        chnSweep.source_trigger_type = nidcpower.TriggerType.DIGITAL_EDGE
-        chnSweep.measure_trigger_type = nidcpower.TriggerType.DIGITAL_EDGE
-        chnSweep.measure_when = nidcpower.MeasureWhen.ON_MEASURE_TRIGGER
-        chnSweep.aperture_time = 200e-6
+        # chnSweep.source_trigger_type = nidcpower.TriggerType.DIGITAL_EDGE
+        # chnSweep.measure_trigger_type = nidcpower.TriggerType.DIGITAL_EDGE
+        # chnSweep.measure_when = nidcpower.MeasureWhen.ON_MEASURE_TRIGGER
+        # chnSweep.aperture_time = 200e-6
 
 
         # vSteps = np.insert(vSteps, -1, 1.5)
@@ -431,7 +433,7 @@ def runIVSweeps(*lstIVSweep : IVSweep, CSV_name, measureTrigger, sourceTrigger):
         # vSteps = np.insert(vSteps, -1, 1.5)
         # np.insert(vSteps, -1, 0)
         # vSteps *= V_step
-        tSteps = [10e-3  for i in range(numStep+1)]
+        tSteps = [20e-3  for i in range(numStep+1)]
         tSteps[0] = 0.6
         # print(f"len of vStep is {len(vSteps)}, len of tSteps is {len(tSteps)}")
         chnSweep.set_sequence(vSteps, tSteps)
@@ -440,14 +442,14 @@ def runIVSweeps(*lstIVSweep : IVSweep, CSV_name, measureTrigger, sourceTrigger):
         if ivSweep.isMaster:
             chnSweep.measure_when = nidcpower.MeasureWhen.AUTOMATICALLY_AFTER_SOURCE_COMPLETE
             chnSweep.measure_complete_event_delay = ivSweep.measure_complete_event_delay
-            sourceTriggerInputTerminal = sourceTrigger
-            measureTriggerInputTerminal = measureTrigger
-            # sourceTriggerInputTerminal = f"/{device}/Engine{channel}/SourceTrigger"
-            # measureTriggerInputTerminal = f"/{device}/Engine{channel}/SourceCompleteEvent"
+            # sourceTriggerInputTerminal = sourceTrigger
+            # measureTriggerInputTerminal = measureTrigger
+            sourceTriggerInputTerminal = f"/{device}/Engine{channel}/SourceTrigger"
+            measureTriggerInputTerminal = f"/{device}/Engine{channel}/SourceCompleteEvent"
             # chnSweep.exported_source_trigger_output_terminal = sourceTriggerInputTerminal
             # chnSweep.exported_measure_trigger_output_terminal = measureTriggerInputTerminal
             print(measureTriggerInputTerminal)
-        tSteps = [5e-5  for i in range(numStep+1)]
+        tSteps = [15e-3  for i in range(numStep+1)]
         tSteps[0] = 0.5
         for bias in ivSweep.biases:
             if bias.VoltSense:
@@ -474,8 +476,8 @@ def runIVSweeps(*lstIVSweep : IVSweep, CSV_name, measureTrigger, sourceTrigger):
                     chnBias.sense = nidcpower.Sense.REMOTE
                 chnBias.aperture_time = ivSweep.apertureTime
                 chnBias.source_delay = bias.source_delay
-                chnBias.autorange_behavior = nidcpower.AutorangeBehavior.UP
-                chnBias.autorange_threshold_mode = nidcpower.AutorangeThresholdMode.FAST_STEP
+                # chnBias.autorange_behavior = nidcpower.AutorangeBehavior.UP
+                # chnBias.autorange_threshold_mode = nidcpower.AutorangeThresholdMode.FAST_STEP
 
                 # chnBias.current_limit_range = bias.I_compls
                 chnBias.measure_when = nidcpower.MeasureWhen.ON_MEASURE_TRIGGER
@@ -608,70 +610,6 @@ def fetch_multiple2(chn,count,voltage_measurements,current_measurements):
     Measurement = collections.namedtuple('Measurement', ['chn', 'voltage', 'current'])
     return [Measurement(chn=chn, voltage=voltage_measurements[i], current=current_measurements[i]) for i in range(count)]
 
-def test4156(CSV_name):
-    with HP4156C("GPIB0::18::INSTR") as hp415x:
-        lstChns = [HP4156C.Unit.SMU1,HP4156C.Unit.SMU2]
-        V_start_A = -1
-        V_stop_A = 1
-        V_step_A = 0.02
-        hp415x.outputFormat         (HP4156C.OutputFormat.AsciiWithHeader,
-                                    HP4156C.OutputMode.PrimarySweep,
-                                    )
-        hp415x.setAverage           (1)
-        hp415x.setIntegrationTime   (HP4156C.IntegrationTime.Short, 0.5e-3)
-        hp415x.setIntegrationTime   (HP4156C.IntegrationTime.Long,  40e-3)
-        # hp415x.setIntegrationTime   (HP4156C.IntegrationTime.Medium, 20e-3)
-        hp415x.selectIntegrationTime(HP4156C.IntegrationTime.Long)
-        hp415x.setFilter            (False)
-        hp415x.enableUnit           (*lstChns)
-        hp415x.selectMeasurementMode(HP4156C.MeasureMode.StaircaseSweep, *lstChns)
-        hp415x.selectAbortCondition (HP4156C.AbortCondition.Disabled,
-                                    HP4156C.PostCondition.StartValue,
-                                    )
-        numStep = int((V_stop_A-V_start_A + V_step_A/2)/V_step_A)+1
-        hp415x.sweepVoltageStaircase(HP4156C.Unit.SMU1,
-                                    HP4156C.SweepMode.SingleLinearSweep,
-                                    HP4156C.VoltageRange.Limited20V,
-                                    start=V_start_A,
-                                    stop=V_stop_A,
-                                    step=numStep,
-                                    Icomp=0.002,
-                                    )
-        hp415x.setSweepTiming       (hold=0.0, delay=10e-3)
-        hp415x.forceVoltage         (HP4156C.Unit.SMU2,
-                                    HP4156C.VoltageRange.Limited20V,
-                                    voltage=0,
-                                    Icomp=0.002,
-                                    )
-        if not hp415x.operationComplete():
-            raise RuntimeError('Operation pending')
-        errCode, errMsg = hp415x.errorMessage()
-        if not errCode==0:
-            msg = 'Measurment setup error: ' + errMsg
-            print(msg)
-        ret = hp415x.execute()
-        if ret!=0:
-            print('Execution failed')
-        hp415x.disableUnit()
-        N = hp415x.numberOfData()
-        df_meas_list = []
-        if N>0:
-            resData, resStatus = hp415x.readMeasuredData(N)
-            key = (HP4156C.Unit.SMU1, HP4156C.ResultDataType.VoltageForced)
-            vol =  resData[key]
-            key = (HP4156C.Unit.SMU1, HP4156C.ResultDataType.CurrentMeasured)
-            current = resData[key]
-            df = pd.DataFrame(fetch_multiple2(1,N,vol,current))
-            df_meas_list.append(df)
-            # key = (HP4156C.Unit.SMU2, HP4156C.ResultDataType.VoltageForced)
-            # vol =  resData[key]
-            key = (HP4156C.Unit.SMU2, HP4156C.ResultDataType.CurrentMeasured)
-            current = resData[key]
-            df = pd.DataFrame(fetch_multiple2(2,N,vol,current))
-            df_meas_list.append(df)
-        all_meas = pd.concat(df_meas_list, axis=1)
-        all_meas.to_csv(CSV_name, mode="a+")
-        print(all_meas)
 
 
 
@@ -699,6 +637,18 @@ def _test():
                   sourceDelay=5e-5,
                   isMaster=1,
                   )
+
+    CBCM = IVSweep(ChnVoltSweep('io1', 'SMU1/1', V_start=0, V_stop=1.2, V_step=0.02, I_compl=1e-3, remote_sense=False),
+                    [ChnVoltBias('io2', 'SMU1/6', 0.0, I_compl=1e-3, remote_sense=False),
+                        ChnVoltBias('DeviceBias', 'SMU1/5', 1.18, I_compl=1e-3),
+                        ChnVoltBias('VDD', 'SMU1/4', 1.2, I_compl=1e-3),
+                        ChnVoltBias('VSS', 'SMU1/3', 0, I_compl=1e-3),
+                    ],
+                    apertureTime=20e-3,
+                    sourceDelay=5e-5,
+                    isMaster=1,
+                    )
+                   
 
     diode_csv = ".csv"
     HQB_csv = "chuckFloating_NMOS12_wg10Lg0p13_2_3rd_0p5ms_SourceDelay.csv"
